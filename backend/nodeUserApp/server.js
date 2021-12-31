@@ -51,14 +51,21 @@ app.post('/api/searchuser', async (req,res) => {
 });
 
 app.delete('/api/deleteuser', async (req,res) => {
-    const uname = req.body.username;
-    const user = await register.findOne({username:uname});
 
-    if(user){
-        register.findOneAndDelete({username:uname});
-        return res.json({data:`${uname} Delete successfully`});
-    }else{
-        return res.json({data:`${uname} Not Found`});
+    const uname = req.body.username;
+    const udata = await register.findOne({username:uname});
+    if(udata){
+        const data = await register.findOneAndDelete(
+            {username:uname}
+        );
+        if(data){
+            return res.json({data:`${uname} Deleted Successfully`});
+         }
+         else{
+             return res.json({data:"Not Deleted"});
+         }
+    } else{
+        return res.json({data:`${uname} Doesn't match`});
     }
     
 });
