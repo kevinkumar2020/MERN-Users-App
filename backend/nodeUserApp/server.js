@@ -13,9 +13,18 @@ app.get("/",(req,res)=>{
     res.json({data:"hello kevin"});
 });
 
+app.get("/api/",async(req,res) => {
+    const userData = await register.find();
+    if(userData){
+        return res.json({data:userData});
+    }
+    return res.json({data:"No Data Found"});
+});
+
 app.post('/api/register', async (req,res) => {
     const userdata = req.body;
 
+    // return res.json({data:req.body.username});
     const findData = await register.findOne({
         username:userdata.username,
     });
@@ -50,22 +59,44 @@ app.post('/api/searchuser', async (req,res) => {
     return res.json({data:`${req.body.username} Not Found`});
 });
 
-app.delete('/api/deleteuser', async (req,res) => {
-
-    const uname = req.body.username;
-    const udata = await register.findOne({username:uname});
+app.delete('/api/deleteuser', async  (req,res) => {
+    const userData = req.body;
+    const udata = await register.findOne({username:userData.username});
     if(udata){
         const data = await register.findOneAndDelete(
-            {username:uname}
+            {username:userData.username}
         );
         if(data){
-            return res.json({data:`${uname} Deleted Successfully`});
+            return res.json({data:`${userData.username} Deleted Successfully`});
          }
          else{
              return res.json({data:"Not Deleted"});
          }
     } else{
-        return res.json({data:`${uname} Doesn't match`});
+        return res.json({data:`${userData.username} Doesn't match`});
+    }
+    
+});
+
+app.put("/api/updateuser",async(req,res) => {
+    const userdata = req.body;
+
+    const udata = await register.findOne({username:userdata.username});
+    if(udata){
+        const uUpdate = await register.findOneAndUpdate(
+            {username:userdata.username},
+            {age:userdata.age,nickname:userdata.nickname,password:userdata.password},
+            {new:true}
+            );
+        
+            if(uUpdate){
+                return res.json({data:`${userdata.username} Update Successfully`});
+            }else{
+                return res.json({data:"Somthing Want To Wrong"});
+            }
+
+    }else{
+        return res.json({data:`${userdata.username} Not Found`});
     }
     
 });

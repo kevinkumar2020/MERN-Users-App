@@ -1,17 +1,26 @@
 import axios from 'axios';
+import { useState } from 'react';
 
 const Register = () => {
+    
+    // const tempUser = {
+    //     username: "",
+    //     age: 0,
+    //     nickname: "",
+    //     password: "",
+    // };
 
-    const user = {
+    const [user,setUser] = useState([{
         username: "",
         age: 0,
         nickname: "",
         password: "",
-    };
+    }]);
 
     const addUser = () => {
+
         axios.post("/api/register", user).then((res) => { console.log(res.data); });
-        // console.log(user);
+        console.log(user);
     };
 
     return (
@@ -21,18 +30,18 @@ const Register = () => {
                     <div className="col">
                         <div className="mb-3">
                             <label for="exampleFormControlInput1" className="form-label">UserName</label>
-                            <input type="text" onChange={(e) => user.username = e.target.value} className="form-control" id="exampleFormControlInput1" placeholder="username" />
+                            <input type="text" onChange={(e) => setUser({...user,username:e.target.value}) } className="form-control" id="exampleFormControlInput1" placeholder="username" />
                         </div>
                         <div className="mb-3">
                             <label for="exampleFormControlInput1" className="form-label">Age</label>
-                            <input type="text" onChange={(e) => user.age = e.target.value} className="form-control" id="exampleFormControlInput1" placeholder="18" />
+                            <input type="text" onChange={(e) =>setUser({...user,age:e.target.value})} className="form-control" id="exampleFormControlInput1" placeholder="18" />
                         </div>
                         <div className="mb-3">
                             <label for="exampleFormControlInput1" className="form-label">NickName</label>
-                            <input type="text" onChange={(e) => user.nickname = e.target.value} className="form-control" id="exampleFormControlInput1" placeholder="nickname" />
+                            <input type="text" onChange={(e) => setUser({...user,nickname:e.target.value})} className="form-control" id="exampleFormControlInput1" placeholder="nickname" />
                         </div>
                         <div className="mb-3">
-                            <input type="password" onChange={(e) => user.password = e.target.value} className="form-control" id="exampleFormControlInput1" placeholder="password" />
+                            <input type="password" onChange={(e) => setUser({...user,password:e.target.value})} className="form-control" id="exampleFormControlInput1" placeholder="password" />
                         </div>
                         <div class="mb-3">
                             <button type="button" onClick={addUser} className="btn btn-primary">Submit</button>
@@ -43,7 +52,6 @@ const Register = () => {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 };
